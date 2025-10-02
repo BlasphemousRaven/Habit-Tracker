@@ -16,13 +16,44 @@ const daysInMonths = new Map([
 const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const daysOfTheWeek = ["Mon","Tue","Wed","Thu","Fri","Sa","Sun"]
 
+const month_lbl = document.getElementById("month");
 const mainDiv = document.getElementById("div");
 
-GenerateCalendar();
+let monthIndex = 9;
 
+GenerateCalendar(monthIndex);
 
-function GenerateCalendar(){
-  for(let i=1;i<GetDaysInMonth()+1;i++){
+  
+//TODO possible logical error with modulo
+function NextMonth(){
+  let nextMonth = (monthIndex+1)%12;
+  monthIndex = nextMonth;
+  GenerateCalendar(monthIndex);
+    
+}
+
+function PrevMonth(){
+  let prevMonth = (monthIndex-1)%11;
+
+  if (prevMonth==-1) {
+    prevMonth=11;
+  }
+
+  monthIndex = prevMonth;
+
+  GenerateCalendar(monthIndex);
+}
+
+function GenerateCalendar(monthIndex){
+  console.log(monthIndex)
+  month_lbl.innerHTML = GetMonthName(monthIndex);
+
+  //deletes every child of mainDiv
+  while(mainDiv.lastElementChild){
+    mainDiv.removeChild(mainDiv.lastElementChild);
+  }
+
+  for(let i=1;i<GetDaysInMonth(monthIndex)+1;i++){
 
     //create some space
     AddSpace();
@@ -33,7 +64,9 @@ function GenerateCalendar(){
     }
     
     let day = '' + i;
-    let weekDay = GetWeekDay(i);
+
+    let weekDay = GetWeekDay(i,monthIndex);
+
     let btn = CreateButton(day,weekDay);  
     mainDiv.appendChild(btn);
   }
@@ -76,21 +109,27 @@ function CreateButton(btn_label, div_label){
     return btn;
 }
 
-function GetDaysInMonth(){
-  return daysInMonths.get(GetMonth());
+//returns amount of days in month as INT
+function GetDaysInMonth(monthIndex){
+    let monthName = GetMonthName(monthIndex);
+    return daysInMonths.get(monthName);    
 }
 
-function GetMonth(){
-  let monthIndex = new Date().getMonth(); 
-  let monthName = monthNames[monthIndex]; 
-  return monthName;
+function GetMonthName(monthIndex){
+  return monthNames[monthIndex];
 }
 
-function GetWeekDay(day){
-  let month = new Date().getMonth();
-  let str = "2025-" + month + "-" + day;
-  let date = new Date(str);
-  let index = date.getDay(); 
+function GetWeekDay(day,month){
+  let date_str = "2025-"+month+"-"+day;
+  let date = new Date(date_str);
+
+  // 0 1 2 3 4 5 6 
+  // So Mon Di Mi Thu Fr Sa
+  let index = (date.getDay()-1)%7;
+  //because JavaShit chooses -1 over 6 when calculating modulo...
+  if(index==-1){
+    index = 6;
+  } 
 
   return daysOfTheWeek[index];
 }
@@ -108,11 +147,3 @@ function ChangeColor(button) {
   }
 }
 
-function NextMonth(){
- console.log("next") 
-}
-
-function PrevMonth(){
-
- console.log("prev") 
-}

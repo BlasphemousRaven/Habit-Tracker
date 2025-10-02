@@ -14,7 +14,7 @@ const daysInMonths = new Map([
 ]);
 
 const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const daysOfTheWeek = ["Mon","Tue","Wed","Thu","Fri","Sa","Sun"]
+const daysOfTheWeek = ["Mo","Di","Mi","Do","Fr","Sa","So"]
 
 const month_lbl = document.getElementById("month");
 const mainDiv = document.getElementById("div");
@@ -90,16 +90,17 @@ function CreateButton(btn_label, div_label){
     let div_lbl = document.createElement("label");
     let label = document.createElement("label");
     
-    btn.style.innerRadius = "3px";
     
     label.innerHTML = btn_label;
 
     div_lbl.innerHTML = div_label;
-    div.style.placeItems = "center";
 
+    div.style.placeItems = "center";
     div.style.height = "30px";
     div.style.width = "30px";
     div.style.backgroundColor= "white";
+    div.style.borderRadius = "3px"
+
     div.appendChild(div_lbl);
 
     btn.appendChild(label);

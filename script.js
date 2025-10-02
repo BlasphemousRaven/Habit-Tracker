@@ -20,8 +20,9 @@ const mainDiv = document.getElementById("div");
 
 GenerateCalendar();
 
+
 function GenerateCalendar(){
-  for(let i=1;i<GetDaysInMonths()+1;i++){
+  for(let i=1;i<GetDaysInMonth()+1;i++){
 
     //create some space
     AddSpace();
@@ -30,9 +31,10 @@ function GenerateCalendar(){
       //create new line 
       AddLineBreak();
     }
-
-    let str = '' + i;
-    let btn = CreateButton(str);  
+    
+    let day = '' + i;
+    let weekDay = GetWeekDay(i);
+    let btn = CreateButton(day,weekDay);  
     mainDiv.appendChild(btn);
   }
 }
@@ -49,27 +51,32 @@ function AddLineBreak(){
 }
 
 
-function CreateButton(btn_label){
+function CreateButton(btn_label, div_label){
     let btn = document.createElement("button");
     let div = document.createElement("div");
+    let div_lbl = document.createElement("label");
     let label = document.createElement("label");
     
     btn.style.innerRadius = "3px";
     
     label.innerHTML = btn_label;
 
+    div_lbl.innerHTML = div_label;
+    div.style.placeItems = "center";
+
     div.style.height = "30px";
     div.style.width = "30px";
     div.style.backgroundColor= "white";
-    
+    div.appendChild(div_lbl);
 
     btn.appendChild(label);
     btn.appendChild(div);
     btn.setAttribute("onClick","ChangeColor(this)");
+
     return btn;
 }
 
-function GetDaysInMonths(){
+function GetDaysInMonth(){
   return daysInMonths.get(GetMonth());
 }
 
@@ -79,17 +86,15 @@ function GetMonth(){
   return monthName;
 }
 
-function GetFirstWeekDay(){
-  let month = new Date().getMonth()+1;
+function GetWeekDay(day){
+  let month = new Date().getMonth();
+  let str = "2025-" + month + "-" + day;
+  let date = new Date(str);
+  let index = date.getDay(); 
 
-  let str = "2025-" + month+ "-01";
-  let date = new Date(str);    
-
-  //capitalist america
-  let weekDayIndex = date.getDate();
-  
-  return daysOfTheWeek[weekDayIndex];
+  return daysOfTheWeek[index];
 }
+
 
 function ChangeColor(button) { 
   let obj = button.children[1];
@@ -103,3 +108,11 @@ function ChangeColor(button) {
   }
 }
 
+function NextMonth(){
+ console.log("next") 
+}
+
+function PrevMonth(){
+
+ console.log("prev") 
+}

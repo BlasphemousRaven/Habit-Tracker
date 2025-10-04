@@ -65,12 +65,19 @@ function GenerateCalendar(monthIndex,year){
     mainDiv.removeChild(mainDiv.lastElementChild);
   }
 
+  let daysInMonth = GetDaysInMonth(monthIndex);
+  //handle february leap year
+  if(GetMonthName(monthIndex)=="February" && year%4==0){
+    daysInMonth = 29;
+  }
+
   //creates as many buttons as days in months
-  for(let i=1;i<GetDaysInMonth(monthIndex)+1;i++){
+  for(let i=1;i<daysInMonth+1;i++){
 
     //create some space
     AddSpace();
 
+    //if 7 elements are in one row we want to add a line break
     if(i%7==0){
       //create new line 
       AddLineBreak();
@@ -78,7 +85,7 @@ function GenerateCalendar(monthIndex,year){
     
     //creates button and adds it to main div
     let day = '' + i;
-    let weekDay = GetWeekDay(i,monthIndex);
+    let weekDay = GetWeekDay(i,monthIndex,year);
     let btn = CreateButton(day,weekDay);  
     mainDiv.appendChild(btn);
   }
@@ -132,11 +139,11 @@ function GetMonthName(monthIndex){
   return monthNames[monthIndex];
 }
 
-function GetWeekDay(day,month){
-  let date_str = "2025-"+month+"-"+day;
+function GetWeekDay(day,month,year){
+  let date_str = year+"-"+month+"-"+day;
   let date = new Date(date_str);
 
-  let index = (date.getDay()-1)%7;
+  let index = (date.getDay()+1)%7;
   //because JavaShit chooses -1 over 6 when calculating modulo...
   if(index==-1){
     index = 6;

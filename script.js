@@ -17,18 +17,27 @@ const monthNames = ["January","February","March","April","May","June","July","Au
 const daysOfTheWeek = ["Mo","Di","Mi","Do","Fr","Sa","So"]
 
 const month_lbl = document.getElementById("month");
+const year_lbl = document.getElementById("year");
+
 const mainDiv = document.getElementById("div");
 
-let monthIndex = 9;
+let date = new Date();
+let monthIndex = date.getMonth();
+let year = date.getYear()+1900;
 
-GenerateCalendar(monthIndex);
+GenerateCalendar(monthIndex,year);
 
   
 //TODO possible logical error with modulo
 function NextMonth(){
   let nextMonth = (monthIndex+1)%12;
   monthIndex = nextMonth;
-  GenerateCalendar(monthIndex);
+
+  if(GetMonthName(monthIndex)=="January"){
+    year+=1;
+  }
+
+  GenerateCalendar(monthIndex,year);
     
 }
 
@@ -40,19 +49,23 @@ function PrevMonth(){
   }
 
   monthIndex = prevMonth;
-
-  GenerateCalendar(monthIndex);
+  if(GetMonthName(monthIndex)=="December"){
+    year-=1;
+  }
+  GenerateCalendar(monthIndex,year);
 }
 
-function GenerateCalendar(monthIndex){
-  console.log(monthIndex)
+function GenerateCalendar(monthIndex,year){
+  year_lbl.innerHTML = year;
+
   month_lbl.innerHTML = GetMonthName(monthIndex);
 
-  //deletes every child of mainDiv
+  //deletes every child of mainDiv to clear out screen
   while(mainDiv.lastElementChild){
     mainDiv.removeChild(mainDiv.lastElementChild);
   }
 
+  //creates as many buttons as days in months
   for(let i=1;i<GetDaysInMonth(monthIndex)+1;i++){
 
     //create some space
@@ -63,10 +76,9 @@ function GenerateCalendar(monthIndex){
       AddLineBreak();
     }
     
+    //creates button and adds it to main div
     let day = '' + i;
-
     let weekDay = GetWeekDay(i,monthIndex);
-
     let btn = CreateButton(day,weekDay);  
     mainDiv.appendChild(btn);
   }
@@ -124,8 +136,6 @@ function GetWeekDay(day,month){
   let date_str = "2025-"+month+"-"+day;
   let date = new Date(date_str);
 
-  // 0 1 2 3 4 5 6 
-  // So Mon Di Mi Thu Fr Sa
   let index = (date.getDay()-1)%7;
   //because JavaShit chooses -1 over 6 when calculating modulo...
   if(index==-1){

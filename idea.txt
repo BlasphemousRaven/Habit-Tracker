@@ -1,0 +1,19 @@
+# IDEA
+- if button click(set it to green) 
+-> hash that date
+-> save it as json date_hash:green
+- every time you generate a calendar you first check if its hash is already in json and if so, set it to green
+- use localstorage or sth
+
+
+
+COLOR = WHITE
+IF DAY IN DATABASE: 
+COLOR = GREEN
+GenerateCalendar(..color)
+
+in ChangeColor:
+IF CHANGE TO GREEN
+  APPEND DATE TO DATABASE
+IF CHANGE TO WHITE
+  REMOVE DATE FROM DATABASE

@@ -1,3 +1,5 @@
+// Most attrocious ugly code i have ever written
+
 const daysInMonths = new Map([
   ["January",31],
   ["February",28],
@@ -84,9 +86,12 @@ function GenerateCalendar(monthIndex,year){
     }
     
     //creates button and adds it to main div
+    let month = monthIndex+1;
+    let date = year +"-"+ month +"-"+ i;
+
     let day = '' + i;
     let weekDay = GetWeekDay(i,monthIndex,year);
-    let btn = CreateButton(day,weekDay);  
+    let btn = CreateButton(day,weekDay,date);  
     mainDiv.appendChild(btn);
   }
 }
@@ -103,7 +108,7 @@ function AddLineBreak(){
 }
 
 
-function CreateButton(btn_label, div_label){
+function CreateButton(btn_label, div_label,btn_id){
     let btn = document.createElement("button");
     let div = document.createElement("div");
     let div_lbl = document.createElement("label");
@@ -125,6 +130,11 @@ function CreateButton(btn_label, div_label){
     btn.appendChild(label);
     btn.appendChild(div);
     btn.setAttribute("onClick","ChangeColor(this)");
+    btn.id = btn_id;
+
+    if(localStorage.getItem(btn.id) == "green"){
+        ChangeColor(btn); 
+    }
 
     return btn;
 }
@@ -156,12 +166,16 @@ function GetWeekDay(day,month,year){
 function ChangeColor(button) { 
   let obj = button.children[1];
   let color = obj.style.backgroundColor;
+  let id = button.id;
+  console.log(id)
 
   if(color=="white"){
       obj.style.backgroundColor = "lightgreen";
-  }
+      localStorage.setItem(id,"green");
+}
   else{
       obj.style.backgroundColor = "white";
+      localStorage.setItem(id,"white");
   }
 }
 
